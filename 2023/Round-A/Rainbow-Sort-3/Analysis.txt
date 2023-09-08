@@ -1,0 +1,78 @@
+Analysis
+
+For simplicity, let us say the positive integers to be written on the cards are represented with an array A.
+
+Test Set 1
+In this test set, since N
+ is very small, we can try all possible orderings of unique values of colours and use their indices in these orderings to build candidate A arrays and find one non-decreasing A from them.
+Find all the unique values of S
+ using a hash set in O(N)
+ time. Let M
+ be the array holding the unique values.
+Find all the permutations of M
+. For each permutation P
+ of M
+, follow the below logic to create A.
+
+Initialize a hash map X
+. For each Pi
+, assign X[Pi]=i
+. Iterate through S
+ and for each Si
+, assign A[i]=X[Si]
+. Once A is constructed, we can easily check whether A is non-decreasing by iterating through the array.
+Return IMPOSSIBLE if none of the A arrays is non-decreasing, else return one of them as the answer. For each permutation, we take O(N)
+ time to check whether the array A is non- decreasing. Since there are O(N!)
+ such permutations, the overall complexity of this solution is O(N!×N)
+.
+
+
+Test Set 2
+The previous algorithm would be too slow for Test Set 2, so we must find a more efficient solution.
+
+For cards to have a possible valid A array, we can conjecture that cards with the same value should be consecutive to each other, i.e., not separated by another card of a different value.
+By way of contradiction, let us suppose our above conjecture is incorrect i.e., at least one card is present with a different number between two cards with same value.
+Let Si
+, Sj
+, Sk
+ be three values in S such that i<j<k
+ and Si=Sk≠Sj
+. Hence A[i]=
+A[k]≠
+A[j]
+.
+Since Si≠Sj
+, A[i]<
+A[j]
+.
+Similarly, since Sj≠Sk
+, A[j]<
+A[k]
+.
+Hence, A[i]<
+A[k]
+ which is contradictory.
+So cards with the same values should be consecutive to each other.
+
+It follows from the above observation that we only need to consider unique values of S
+. For simplicity, let K
+ be the array after removing consecutive duplicates while keeping one instance of one unique value in S
+ and also keeping the order of unique elements same. Let L
+ be the array such that Li
+ is the index position of Si
+ in K
+. We can easily see that L
+ is a non-decreasing array and the mapping between S
+ and L
+ is one to one.
+Initialize an A array and an empty hash set to store elements of S
+ seen while iterating. Iterate through S
+ from left to right and for each Si
+, find if the element appeared before in the list i.e., if the element is present in the hash set.
+If the element is not present, then insert the element into the hash set and A array and continue iterating.
+If the element is present in the hash set and it is equal to the previous element in S
+ then continue iterating else return the answer as IMPOSSIBLE.
+If we are able to successfully iterate all the way through S
+, then return the A array built while iterating. Since we are iterating through S
+ only once and using the hash set, the overall time complexity of this solution is O(N)
+.
